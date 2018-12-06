@@ -161,11 +161,26 @@ public class PianoKeyBoard extends View {
                     k.setFingerPaint(fingerTextPaint);
                     k.setFingerText(fingerStr);
                     k.setFingerPointF(pointF);
-                    k.setRadius(blackKeyWidth/2);
+                    k.setRadius(blackKeyWidth/3);
+                    k.setShowCircleAndFinger(true);
                 }
             }
             postInvalidate();
         }
+    }
+
+    public void clearAllCircleAndFinger(){
+        if (list!=null){
+            for (Key key:list){
+                key.setShowCircleAndFinger(false);
+            }
+            postInvalidate();
+        }
+    }
+
+    public void clearCircleAndFinger(Key key){
+        key.setShowCircleAndFinger(false);
+        postInvalidate();
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -249,7 +264,7 @@ public class PianoKeyBoard extends View {
         if (keyListener != null) {
             keyListener.onKeyUp(key);
         }
-        if (key.getCirclePaint()==null){
+        if (!key.isShowCircleAndFinger()){
             key.setPressed(false, isPlaySound);
         }
         invalidate();

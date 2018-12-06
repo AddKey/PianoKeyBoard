@@ -29,6 +29,7 @@ public abstract class Key {
     private PointF circleCenterPointF;
     private float radius;
     private Paint circlePaint;
+    private boolean showCircleAndFinger;
     public Key(float left, float top, float right, float bottom) {
 
         rectF = new RectF(left, top, right, bottom);
@@ -68,11 +69,11 @@ public abstract class Key {
             canvas.drawText(textToDraw, textPoint.x, textPoint.y, getKeyTextPaint());
         }
 
-        if (circleCenterPointF!=null&&circlePaint!=null){
+        if (circleCenterPointF!=null&&circlePaint!=null&&showCircleAndFinger){
             canvas.drawCircle(circleCenterPointF.x,circleCenterPointF.y,radius,circlePaint);
         }
 
-        if (!TextUtils.isEmpty(fingerText)&&fingerPointF!=null&&fingerPaint!=null){
+        if (!TextUtils.isEmpty(fingerText)&&fingerPointF!=null&&fingerPaint!=null&&showCircleAndFinger){
             canvas.drawText(fingerText,fingerPointF.x,fingerPointF.y,fingerPaint);
         }
 
@@ -175,5 +176,13 @@ public abstract class Key {
 
     public void setFingerPaint(TextPaint fingerPaint) {
         this.fingerPaint = fingerPaint;
+    }
+
+    public boolean isShowCircleAndFinger() {
+        return showCircleAndFinger;
+    }
+
+    public void setShowCircleAndFinger(boolean showCircleAndFinger) {
+        this.showCircleAndFinger = showCircleAndFinger;
     }
 }
