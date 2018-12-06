@@ -2,6 +2,7 @@ package tech.oom.library.keyBoard;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -30,6 +31,7 @@ public abstract class Key {
     private float radius;
     private Paint circlePaint;
     private boolean showCircleAndFinger;
+    private int circlePaintColor = Color.RED;
     public Key(float left, float top, float right, float bottom) {
 
         rectF = new RectF(left, top, right, bottom);
@@ -70,6 +72,7 @@ public abstract class Key {
         }
 
         if (circleCenterPointF!=null&&circlePaint!=null&&showCircleAndFinger){
+            circlePaint.setColor(circlePaintColor);
             canvas.drawCircle(circleCenterPointF.x,circleCenterPointF.y,radius,circlePaint);
         }
 
@@ -184,5 +187,13 @@ public abstract class Key {
 
     public void setShowCircleAndFinger(boolean showCircleAndFinger) {
         this.showCircleAndFinger = showCircleAndFinger;
+    }
+
+    public int getCirclePaintColor() {
+        return circlePaintColor;
+    }
+
+    public void setCirclePaintColor(int circlePaintColor) {
+        this.circlePaintColor = circlePaintColor;
     }
 }

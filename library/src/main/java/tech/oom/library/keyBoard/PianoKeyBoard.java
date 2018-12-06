@@ -157,18 +157,17 @@ public class PianoKeyBoard extends View {
             for (Key k : list) {
                 if (k.getKeyCode() == key.getKeyCode()) {
                     if (isLeftKey) {
-                        circlePaint.setColor(circleColorLeft);
+                        k.setCirclePaintColor(circleColorLeft);
                     } else {
-                        circlePaint.setColor(circleColorRight);
+                        k.setCirclePaintColor(circleColorRight);
                     }
-                    Paint paint = circlePaint;
                     Rect minRect = new Rect();
                     fingerTextPaint.getTextBounds(fingerStr,0,fingerStr.length(),minRect);
                     int fingerH = minRect.height();
                     PointF pointCircle = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2);
                     PointF pointFinger = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2+fingerH/2);
                     k.setCircleCenterPointF(pointCircle);
-                    k.setCirclePaint(paint);
+                    k.setCirclePaint(circlePaint);
                     k.setFingerPaint(fingerTextPaint);
                     k.setFingerText(fingerStr);
                     k.setFingerPointF(pointFinger);

@@ -10,6 +10,7 @@ import tech.oom.library.keyBoard.Key;
 import tech.oom.library.keyBoard.PianoKeyBoard;
 import tech.oom.library.sound.SoundPlayUtils;
 
+
 public class MainActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private PianoKeyBoard keyBoard;
@@ -19,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     PianoKeyBoard.KeyListener listener = new PianoKeyBoard.KeyListener() {
         @Override
         public void onKeyPressed(Key key) {
+            keyBoard.showCircleAndFinger(key,true,"15");
+            if (key.getKeyCode()>21){
+
+                keyBoard.showCircleAndFinger(keyBoard.getKeyByKeycode(key.getKeyCode()-1),false,"22");
+            }
 //某个键被按下的回调
         }
 
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        keyBoard.setKeyCount(8);
+        keyBoard.setKeyCount(8);
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         keyBoard.setKeyListener(listener);
+        keyBoard.showNext();
+        keyBoard.setShowSparse(true);
 
     }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--&lt;!&ndash;设置白键被按下去时的BitmapDrawable&ndash;&gt;-->
+    <!--<attr name="whiteKeyPressedDrawable" format="reference" />-->
+
+    <!--&lt;!&ndash;白键默认的Drawable&ndash;&gt;-->
+    <!--<attr name="whiteKeyDrawable" format="reference" />-->
+
+    <!--&lt;!&ndash;设置黑键被按下去时的BitmapDrawable&ndash;&gt;-->
+    <!--<attr name="blackKeyPressedDrawable" format="reference" />-->
+
+    <!--&lt;!&ndash;黑键默认的BitmapDrawable&ndash;&gt;-->
+    <!--<attr name="blackKeyDrawable" format="reference" />-->
+
+    <!--&lt;!&ndash;设置一屏/一页 展示的白键的个数&ndash;&gt;-->
+    <!--<attr name="keyCount" format="integer" />-->
+
+    <!--&lt;!&ndash;黑键占整个键盘高度的比&ndash;&gt;-->
+    <!--<attr name="blackKeyHeightRatio" format="float" />-->
+
+    <!--&lt;!&ndash;黑键的宽度 黑键宽度和白键宽度的比&ndash;&gt;-->
+    <!--<attr name="blackKeyWidthRatioToWhiteKeyWidth" format="float" />-->
+
+    <!--&lt;!&ndash;设置白键上字体的高度占白键高度的比&ndash;&gt;-->
+    <!--<attr name="pronuncTextYRatio" format="float" />-->
+
+    <!--&lt;!&ndash;设置白键上字体的大小&ndash;&gt;-->
+    <!--<attr name="pronuncTextSize" format="dimension" />-->
+
+    <!--&lt;!&ndash;设置白键上字体的颜色&ndash;&gt;-->
+    <!--<attr name="pronuncTextColor" format="color" />-->
+    <tech.oom.library.keyBoard.PianoKeyBoard
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/keyboard"
+        app:blackKeyDrawable="@mipmap/key_black_default"
+        app:blackKeyPressedDrawable="@mipmap/key_black_down"
+        app:whiteKeyDrawable="@mipmap/key_white_default"
+        app:whiteKeyPressedDrawable="@mipmap/key_white_down"
+        app:keyCount="52"
+        app:blackKeyHeightRatio="0.66"
+        />
+</FrameLayout>
