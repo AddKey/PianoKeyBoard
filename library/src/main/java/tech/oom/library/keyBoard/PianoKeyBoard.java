@@ -232,12 +232,15 @@ public class PianoKeyBoard extends View {
     }
 
     private void onFingerUp(int index, float x, float y) {
-        Key key = this.keyMap.get(Integer.valueOf(index));
+        Key key = this.keyMap.get(index);
         if (key != null) {
             fireKeyUp(key);
             this.keyMap.remove(index);
         } else {
             Key key1 = pointerInWhichKey(x, y);
+            if (key1 == null){
+                return;
+            }
             fireKeyUp(key1);
         }
     }
@@ -247,7 +250,7 @@ public class PianoKeyBoard extends View {
         if (key == null)
             return;
         fireKeyDown(key);
-        this.keyMap.put(Integer.valueOf(index), key);
+        this.keyMap.put(index, key);
 
     }
 
@@ -261,7 +264,7 @@ public class PianoKeyBoard extends View {
     }
 
     private void onFingerMove(int index, float x, float y) {
-        Key key = this.keyMap.get(Integer.valueOf(index));
+        Key key = this.keyMap.get(index);
         Key currentKey = pointerInWhichKey(x, y);
         if (key != null) {
             if ((currentKey != null) && (currentKey != key)) {
@@ -280,7 +283,7 @@ public class PianoKeyBoard extends View {
         if (!key.isShowCircleAndFinger()) {
             key.setPressed(false, isPlaySound);
         }
-        invalidate();
+       postInvalidate();
     }
 
     private void fireKeyDown(Key key) {
@@ -288,7 +291,7 @@ public class PianoKeyBoard extends View {
             keyListener.onKeyPressed(key);
         }
         key.setPressed(true, isPlaySound);
-        invalidate();
+       postInvalidate();
     }
 
     private Key pointerInWhichKey(float x, float y) {
@@ -328,7 +331,7 @@ public class PianoKeyBoard extends View {
         reverseList.clear();
         reverseList.addAll(list);
         Collections.reverse(reverseList);
-        invalidate();
+        postInvalidate();
     }
 
     @Override
