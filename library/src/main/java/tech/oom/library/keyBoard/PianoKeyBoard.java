@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -38,11 +39,15 @@ public class PianoKeyBoard extends View {
     private int keyCount = 12;
     private int pronuncTextColor = Color.GRAY;
     private float pronuncTextDimension = 20;
+    private int circleColorLeft = Color.BLUE;
+    private int circleColorRight = Color.RED;
     private BitmapDrawable whiteKeyDrawable;
     private BitmapDrawable whiteKeyPressedDrawable;
     private BitmapDrawable blackKeyDrawable;
     private BitmapDrawable blackKeyPressedDrawable;
     private TextPaint pronuncTextPaint;
+    private TextPaint fingerTextPaint;
+    private Paint circlePaint;
     private float blackKeyHeightRatio = 0.5f;
     private float pronuncTextYRatio = 0.9f;
     private int min_size = 700;
@@ -50,7 +55,7 @@ public class PianoKeyBoard extends View {
     private KeyListener keyListener;
     private float keyBoardContentWidth;
     private float xOffset;
-
+    private boolean showSparse; //是否只有每组白键的第一个键位显示文字
     public PianoKeyBoard(Context context) {
         super(context);
         init(null, 0);
@@ -70,7 +75,8 @@ public class PianoKeyBoard extends View {
     private void init(AttributeSet attrs, int defStyle) {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.PianoKeyBoard, defStyle, 0);
-
+        circleColorLeft = a.getColor(R.styleable.PianoKeyBoard_circleColorLeft,circleColorLeft);
+        circleColorRight = a.getColor(R.styleable.PianoKeyBoard_circleColorRight,circleColorRight);
         pronuncTextColor = a.getColor(
                 R.styleable.PianoKeyBoard_pronuncTextColor,
                 pronuncTextColor);
@@ -108,6 +114,21 @@ public class PianoKeyBoard extends View {
         pronuncTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         pronuncTextPaint.setTextAlign(Paint.Align.CENTER);
         invalidatePaintAndMeasurements();
+        initFingerTextAndCircleBackground();
+    }
+
+    private void initFingerTextAndCircleBackground() {
+        fingerTextPaint = new TextPaint();
+        fingerTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        fingerTextPaint.setTextAlign(Paint.Align.CENTER);
+        fingerTextPaint.setTextSize(pronuncTextDimension);
+        fingerTextPaint.setColor(pronuncTextColor);
+
+        circlePaint = new Paint();
+        circlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(circleColorLeft);
+
     }
 
     private void invalidatePaintAndMeasurements() {
@@ -125,7 +146,27 @@ public class PianoKeyBoard extends View {
         }
 
     }
-
+    public void showCircleAndFinger(Key key,boolean isLeftKey,String fingerStr){
+        if (list!=null){
+            for (Key k:list){
+                if (k.getKeyCode() == key.getKeyCode()){
+                    if (isLeftKey){
+                        circlePaint.setColor(circleColorLeft);
+                    }else {
+                        circlePaint.setColor(circleColorRight);
+                    }
+                    PointF pointF = new PointF(k.getRectF().left/2+k.getRectF().right/2,k.getRectF().top/2+k.getRectF().bottom/2);
+                    k.setCircleCenterPointF(pointF);
+                    k.setCirclePaint(circlePaint);
+                    k.setFingerPaint(fingerTextPaint);
+                    k.setFingerText(fingerStr);
+                    k.setFingerPointF(pointF);
+                    k.setRadius(blackKeyWidth/2);
+                }
+            }
+            postInvalidate();
+        }
+    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         onNewTouchEvent(event);
@@ -208,7 +249,9 @@ public class PianoKeyBoard extends View {
         if (keyListener != null) {
             keyListener.onKeyUp(key);
         }
-        key.setPressed(false, isPlaySound);
+        if (key.getCirclePaint()==null){
+            key.setPressed(false, isPlaySound);
+        }
         invalidate();
     }
 
@@ -250,7 +293,7 @@ public class PianoKeyBoard extends View {
         keyBoardContentWidth = whiteKeyWidth * Const.PRONUNCIATION.length;
 //        xOffset = -(keyBoardContentWidth - keyBoardWidth) / 2;
 //        xOffset = -(keyBoardContentWidth - keyBoardWidth) / 2;
-        list.addAll(WhiteKey.generatorWhiteKey(whiteKeyWidth, keyBoardHeight, whiteKeyDrawable.getBitmap(), whiteKeyPressedDrawable.getBitmap(), pronuncTextPaint, whiteKeyHeight * pronuncTextYRatio));
+        list.addAll(WhiteKey.generatorWhiteKey(whiteKeyWidth, keyBoardHeight, whiteKeyDrawable.getBitmap(), whiteKeyPressedDrawable.getBitmap(), pronuncTextPaint, whiteKeyHeight * pronuncTextYRatio,showSparse));
         list.addAll(BlackKey.generatorBlackKey(whiteKeyWidth, blackKeyWidth, blackKeyHeight, blackKeyDrawable.getBitmap(), blackKeyPressedDrawable.getBitmap()));
 //        pointerInWhichKey(xOffset,0);
         reverseList.clear();
@@ -464,6 +507,12 @@ public class PianoKeyBoard extends View {
             }
         }
 
+    }
+
+
+    public void setShowSparse(boolean showSparse) {
+        this.showSparse = showSparse;
+        initKeys();
     }
 
     /**

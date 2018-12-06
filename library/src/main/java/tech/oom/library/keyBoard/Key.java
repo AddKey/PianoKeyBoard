@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.text.TextPaint;
 import android.text.TextUtils;
 
 import tech.oom.library.sound.SoundPlayUtils;
@@ -21,8 +22,13 @@ public abstract class Key {
     private boolean isPressed;
     private Paint keyPaint;
     private int keyCode;
-
-
+    private boolean isHasText = true;
+    private TextPaint fingerPaint;
+    private String fingerText;
+    private PointF fingerPointF;
+    private PointF circleCenterPointF;
+    private float radius;
+    private Paint circlePaint;
     public Key(float left, float top, float right, float bottom) {
 
         rectF = new RectF(left, top, right, bottom);
@@ -58,9 +64,18 @@ public abstract class Key {
         }
         String textToDraw = getTextToDraw();
         PointF textPoint = getTextPoint();
-        if (!TextUtils.isEmpty(textToDraw) && getKeyTextPaint() != null && textPoint != null) {
+        if (!TextUtils.isEmpty(textToDraw) && getKeyTextPaint() != null && textPoint != null&&isHasText) {
             canvas.drawText(textToDraw, textPoint.x, textPoint.y, getKeyTextPaint());
         }
+
+        if (circleCenterPointF!=null&&circlePaint!=null){
+            canvas.drawCircle(circleCenterPointF.x,circleCenterPointF.y,radius,circlePaint);
+        }
+
+        if (!TextUtils.isEmpty(fingerText)&&fingerPointF!=null&&fingerPaint!=null){
+            canvas.drawText(fingerText,fingerPointF.x,fingerPointF.y,fingerPaint);
+        }
+
     }
 
     protected abstract Paint getKeyTextPaint();
@@ -72,7 +87,6 @@ public abstract class Key {
     protected abstract String getTextToDraw();
 
     protected abstract PointF getTextPoint();
-
 
     public int getKeyCode() {
         return keyCode;
@@ -86,4 +100,80 @@ public abstract class Key {
         return rectF;
     }
 
+    public boolean isHasText() {
+        return isHasText;
+    }
+
+    public void setHasText(boolean hasText) {
+        isHasText = hasText;
+    }
+
+
+    public void setRectF(RectF rectF) {
+        this.rectF = rectF;
+    }
+
+    public boolean isPressed() {
+        return isPressed;
+    }
+
+    public void setPressed(boolean pressed) {
+        isPressed = pressed;
+    }
+
+    public Paint getKeyPaint() {
+        return keyPaint;
+    }
+
+    public void setKeyPaint(Paint keyPaint) {
+        this.keyPaint = keyPaint;
+    }
+
+    public String getFingerText() {
+        return fingerText;
+    }
+
+    public void setFingerText(String fingerText) {
+        this.fingerText = fingerText;
+    }
+
+    public PointF getFingerPointF() {
+        return fingerPointF;
+    }
+
+    public void setFingerPointF(PointF fingerPointF) {
+        this.fingerPointF = fingerPointF;
+    }
+
+    public PointF getCircleCenterPointF() {
+        return circleCenterPointF;
+    }
+
+    public void setCircleCenterPointF(PointF circleCenterPointF) {
+        this.circleCenterPointF = circleCenterPointF;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
+
+    public void setCirclePaint(Paint circlePaint) {
+        this.circlePaint = circlePaint;
+    }
+
+    public Paint getCirclePaint() {
+        return circlePaint;
+    }
+
+    public TextPaint getFingerPaint() {
+        return fingerPaint;
+    }
+
+    public void setFingerPaint(TextPaint fingerPaint) {
+        this.fingerPaint = fingerPaint;
+    }
 }

@@ -30,5 +30,10 @@
         <!--设置白键上字体的颜色-->
         <attr name="pronuncTextColor" format="color" />
 
+        <!--设置左手弹奏时的灯带颜色-->
+        <attr name="circleColorLeft" format="color"/>
+
+        <!--设置右手弹奏时的灯带颜色-->
+        <attr name="circleColorRight" format="color"/>
     </declare-styleable>
 </resources>

@@ -3,6 +3,7 @@ package tech.oom.library.keyBoard;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.text.TextPaint;
 
 
 import java.util.ArrayList;
@@ -71,6 +72,4 @@ public class BlackKey extends Key {
     protected Paint getKeyTextPaint() {
         return null;
     }
-
-
 }

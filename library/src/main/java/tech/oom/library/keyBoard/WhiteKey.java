@@ -27,7 +27,8 @@ public class WhiteKey extends Key {
         super(left, top, right, bottom);
     }
 
-    public static List<WhiteKey> generatorWhiteKey(float whiteKeyWidth, float whiteKeyHeight, Bitmap unPressedBitmap, Bitmap pressedBitmap, TextPaint whiteTextPaint, float textYCoordinate) {
+    public static List<WhiteKey> generatorWhiteKey(float whiteKeyWidth, float whiteKeyHeight, Bitmap unPressedBitmap, Bitmap pressedBitmap, TextPaint whiteTextPaint,
+                                                   float textYCoordinate, boolean showSparse) {
         ArrayList<WhiteKey> list = new ArrayList<>();
         Paint whitePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         whitePaint.setFilterBitmap(true);
@@ -39,7 +40,11 @@ public class WhiteKey extends Key {
             whiteKey.setPressedBitmap(pressedBitmap);
             whiteKey.setTextPaint(whiteTextPaint);
             whiteKey.setDrawTextCoordinate(i * whiteKeyWidth + whiteKeyWidth / 2, textYCoordinate);
-            whiteKey.setTextToDraw(Const.RANGE[i]);
+            if (showSparse) {
+                whiteKey.setTextToDraw(Const.RANGE_SPARSE[i]);
+            } else {
+                whiteKey.setTextToDraw(Const.RANGE[i]);
+            }
             whiteKey.setKeyCode(Const.WHITEKEY_CODE[i]);
             list.add(whiteKey);
         }
@@ -84,6 +89,7 @@ public class WhiteKey extends Key {
         return pointF;
     }
 
+
     public void setDrawTextCoordinate(float x, float y) {
         this.pointF = new PointF(x, y);
     }
@@ -91,5 +97,17 @@ public class WhiteKey extends Key {
 
     public void setTextPaint(TextPaint textPaint) {
         this.textPaint = textPaint;
+    }
+
+    public TextPaint getTextPaint() {
+        return textPaint;
+    }
+
+    public PointF getPointF() {
+        return pointF;
+    }
+
+    public void setPointF(PointF pointF) {
+        this.pointF = pointF;
     }
 }
