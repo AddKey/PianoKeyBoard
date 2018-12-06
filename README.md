@@ -145,9 +145,7 @@
 ```
 2. Add the dependency
 ```
-	dependencies {
-	         compile 'com.github.ideastudios:PianoKeyBoard:1.1.1'
-	}
+	implementation 'com.github.AddKey:PianoKeyBoard:v1.1.1'
 
 ```
 
@@ -155,3 +153,4 @@
 
 # 说明
 * 此工程中的钢琴按键音音频文件和黑白键的背景图片来自互联网
+*此项目主体来自ideastudios,增加了几个自己项目需要的功能（如灯带和指法的显示）
