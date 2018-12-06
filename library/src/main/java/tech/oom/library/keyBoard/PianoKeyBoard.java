@@ -6,9 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,6 +21,8 @@ import java.util.Iterator;
 
 import tech.oom.library.Const;
 import tech.oom.library.R;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -56,6 +60,7 @@ public class PianoKeyBoard extends View {
     private float keyBoardContentWidth;
     private float xOffset;
     private boolean showSparse; //是否只有每组白键的第一个键位显示文字
+
     public PianoKeyBoard(Context context) {
         super(context);
         init(null, 0);
@@ -75,8 +80,8 @@ public class PianoKeyBoard extends View {
     private void init(AttributeSet attrs, int defStyle) {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.PianoKeyBoard, defStyle, 0);
-        circleColorLeft = a.getColor(R.styleable.PianoKeyBoard_circleColorLeft,circleColorLeft);
-        circleColorRight = a.getColor(R.styleable.PianoKeyBoard_circleColorRight,circleColorRight);
+        circleColorLeft = a.getColor(R.styleable.PianoKeyBoard_circleColorLeft, circleColorLeft);
+        circleColorRight = a.getColor(R.styleable.PianoKeyBoard_circleColorRight, circleColorRight);
         pronuncTextColor = a.getColor(
                 R.styleable.PianoKeyBoard_pronuncTextColor,
                 pronuncTextColor);
@@ -146,22 +151,28 @@ public class PianoKeyBoard extends View {
         }
 
     }
-    public void showCircleAndFinger(Key key,boolean isLeftKey,String fingerStr){
-        if (list!=null){
-            for (Key k:list){
-                if (k.getKeyCode() == key.getKeyCode()){
-                    if (isLeftKey){
+
+    public void showCircleAndFinger(Key key, boolean isLeftKey, String fingerStr) {
+        if (list != null) {
+            for (Key k : list) {
+                if (k.getKeyCode() == key.getKeyCode()) {
+                    if (isLeftKey) {
                         circlePaint.setColor(circleColorLeft);
-                    }else {
+                    } else {
                         circlePaint.setColor(circleColorRight);
                     }
-                    PointF pointF = new PointF(k.getRectF().left/2+k.getRectF().right/2,k.getRectF().top/2+k.getRectF().bottom/2);
-                    k.setCircleCenterPointF(pointF);
+
+                    Rect minRect = new Rect();
+                    fingerTextPaint.getTextBounds(fingerStr,0,fingerStr.length(),minRect);
+                    int fingerH = minRect.height();
+                    PointF pointCircle = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2);
+                    PointF pointFinger = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2+fingerH/2);
+                    k.setCircleCenterPointF(pointCircle);
                     k.setCirclePaint(circlePaint);
                     k.setFingerPaint(fingerTextPaint);
                     k.setFingerText(fingerStr);
-                    k.setFingerPointF(pointF);
-                    k.setRadius(blackKeyWidth/3);
+                    k.setFingerPointF(pointFinger);
+                    k.setRadius(blackKeyWidth / 3);
                     k.setShowCircleAndFinger(true);
                 }
             }
@@ -169,19 +180,20 @@ public class PianoKeyBoard extends View {
         }
     }
 
-    public void clearAllCircleAndFinger(){
-        if (list!=null){
-            for (Key key:list){
+    public void clearAllCircleAndFinger() {
+        if (list != null) {
+            for (Key key : list) {
                 key.setShowCircleAndFinger(false);
             }
             postInvalidate();
         }
     }
 
-    public void clearCircleAndFinger(Key key){
+    public void clearCircleAndFinger(Key key) {
         key.setShowCircleAndFinger(false);
         postInvalidate();
     }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         onNewTouchEvent(event);
@@ -233,6 +245,8 @@ public class PianoKeyBoard extends View {
 
     private void onFingerDown(int index, float x, float y) {
         Key key = pointerInWhichKey(x, y);
+        if (key == null)
+            return;
         fireKeyDown(key);
         this.keyMap.put(Integer.valueOf(index), key);
 
@@ -264,7 +278,7 @@ public class PianoKeyBoard extends View {
         if (keyListener != null) {
             keyListener.onKeyUp(key);
         }
-        if (!key.isShowCircleAndFinger()){
+        if (!key.isShowCircleAndFinger()) {
             key.setPressed(false, isPlaySound);
         }
         invalidate();
@@ -286,6 +300,7 @@ public class PianoKeyBoard extends View {
                 break;
             }
         }
+        Log.i(TAG, "pointerInWhichKey: key:"+currentKey+"--x:"+x+"--y:"+y);
         return currentKey;
     }
 
@@ -308,7 +323,7 @@ public class PianoKeyBoard extends View {
         keyBoardContentWidth = whiteKeyWidth * Const.PRONUNCIATION.length;
 //        xOffset = -(keyBoardContentWidth - keyBoardWidth) / 2;
 //        xOffset = -(keyBoardContentWidth - keyBoardWidth) / 2;
-        list.addAll(WhiteKey.generatorWhiteKey(whiteKeyWidth, keyBoardHeight, whiteKeyDrawable.getBitmap(), whiteKeyPressedDrawable.getBitmap(), pronuncTextPaint, whiteKeyHeight * pronuncTextYRatio,showSparse));
+        list.addAll(WhiteKey.generatorWhiteKey(whiteKeyWidth, keyBoardHeight, whiteKeyDrawable.getBitmap(), whiteKeyPressedDrawable.getBitmap(), pronuncTextPaint, whiteKeyHeight * pronuncTextYRatio, showSparse));
         list.addAll(BlackKey.generatorBlackKey(whiteKeyWidth, blackKeyWidth, blackKeyHeight, blackKeyDrawable.getBitmap(), blackKeyPressedDrawable.getBitmap()));
 //        pointerInWhichKey(xOffset,0);
         reverseList.clear();
