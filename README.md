@@ -145,7 +145,7 @@
 ```
 2. Add the dependency
 ```
-	implementation 'com.github.AddKey:PianoKeyBoard:v1.1.1'
+	implementation 'com.github.AddKey:PianoKeyBoard:v1.0.1'
 
 ```
 
