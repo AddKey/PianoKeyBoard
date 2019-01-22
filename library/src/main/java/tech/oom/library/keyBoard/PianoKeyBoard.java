@@ -282,6 +282,8 @@ public class PianoKeyBoard extends View {
         }
         if (isPlaySound){
             MidiSynthUtils.sendNoteOff(0,key.getKeyCode(),100);
+        }
+        if (!key.isShowCircleAndFinger()){
             key.setPressed(false);
         }
         postInvalidate();
