@@ -7,8 +7,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Handler;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Log;
+
 
 import tech.oom.library.sound.SoundPlayUtils;
 
@@ -18,7 +21,7 @@ import tech.oom.library.sound.SoundPlayUtils;
  */
 
 public abstract class Key {
-
+    private static final String TAG = "Key";
     private RectF rectF;
     private boolean isPressed;
     private Paint keyPaint;
@@ -32,22 +35,14 @@ public abstract class Key {
     private Paint circlePaint;
     private boolean showCircleAndFinger;
     private int circlePaintColor = Color.RED;
+    private int playId;
+
     public Key(float left, float top, float right, float bottom) {
 
         rectF = new RectF(left, top, right, bottom);
         keyPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         keyPaint.setFilterBitmap(true);
         keyPaint.setDither(true);
-    }
-
-    public final void setPressed(boolean isPressed, boolean isPlaySound) {
-        this.isPressed = isPressed;
-        if (isPlaySound && isPressed) {
-            SoundPlayUtils.play(keyCode - 20);
-        } else {
-            SoundPlayUtils.stop(keyCode - 20);
-        }
-
     }
 
     public final void drawKey(Canvas canvas) {
@@ -67,17 +62,17 @@ public abstract class Key {
         }
         String textToDraw = getTextToDraw();
         PointF textPoint = getTextPoint();
-        if (!TextUtils.isEmpty(textToDraw) && getKeyTextPaint() != null && textPoint != null&&isHasText) {
+        if (!TextUtils.isEmpty(textToDraw) && getKeyTextPaint() != null && textPoint != null && isHasText) {
             canvas.drawText(textToDraw, textPoint.x, textPoint.y, getKeyTextPaint());
         }
 
-        if (circleCenterPointF!=null&&circlePaint!=null&&showCircleAndFinger){
+        if (circleCenterPointF != null && circlePaint != null && showCircleAndFinger) {
             circlePaint.setColor(circlePaintColor);
-            canvas.drawCircle(circleCenterPointF.x,circleCenterPointF.y,radius,circlePaint);
+            canvas.drawCircle(circleCenterPointF.x, circleCenterPointF.y, radius, circlePaint);
         }
 
-        if (!TextUtils.isEmpty(fingerText)&&fingerPointF!=null&&fingerPaint!=null&&showCircleAndFinger){
-            canvas.drawText(fingerText,fingerPointF.x,fingerPointF.y,fingerPaint);
+        if (!TextUtils.isEmpty(fingerText) && fingerPointF != null && fingerPaint != null && showCircleAndFinger) {
+            canvas.drawText(fingerText, fingerPointF.x, fingerPointF.y, fingerPaint);
         }
 
     }

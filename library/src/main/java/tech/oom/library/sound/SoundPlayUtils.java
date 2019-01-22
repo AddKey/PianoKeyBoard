@@ -127,12 +127,13 @@ public class SoundPlayUtils {
      *
      * @param soundID
      */
-    public static void play(int soundID) {
-        mSoundPlayer.play(soundID, 1, 1, 0, 0, 1);
+    public static int play(int soundID) {
+       return mSoundPlayer.play(soundID, 1, 1, 0, 0, 1);
     }
 
-    public static void stop(int soundId) {
-        mSoundPlayer.stop(soundId);
+    public static void stop(int soundPlayId) {
+        //这里注意stop要传的是play返回的id
+        mSoundPlayer.stop(soundPlayId);
     }
 
 }

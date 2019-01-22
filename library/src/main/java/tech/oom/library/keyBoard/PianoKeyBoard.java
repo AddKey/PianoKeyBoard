@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import tech.oom.library.Const;
 import tech.oom.library.R;
+import tech.oom.library.sound.MidiSynthUtils;
 
 import static android.content.ContentValues.TAG;
 
@@ -60,7 +61,6 @@ public class PianoKeyBoard extends View {
     private float keyBoardContentWidth;
     private float xOffset;
     private boolean showSparse; //是否只有每组白键的第一个键位显示文字
-
     public PianoKeyBoard(Context context) {
         super(context);
         init(null, 0);
@@ -162,10 +162,10 @@ public class PianoKeyBoard extends View {
                         k.setCirclePaintColor(circleColorRight);
                     }
                     Rect minRect = new Rect();
-                    fingerTextPaint.getTextBounds(fingerStr,0,fingerStr.length(),minRect);
+                    fingerTextPaint.getTextBounds(fingerStr, 0, fingerStr.length(), minRect);
                     int fingerH = minRect.height();
                     PointF pointCircle = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2);
-                    PointF pointFinger = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2+fingerH/2);
+                    PointF pointFinger = new PointF(k.getRectF().left / 2 + k.getRectF().right / 2, k.getRectF().top / 2 + k.getRectF().bottom / 2 + fingerH / 2);
                     k.setCircleCenterPointF(pointCircle);
                     k.setCirclePaint(circlePaint);
                     k.setFingerPaint(fingerTextPaint);
@@ -238,7 +238,7 @@ public class PianoKeyBoard extends View {
             this.keyMap.remove(index);
         } else {
             Key key1 = pointerInWhichKey(x, y);
-            if (key1 == null){
+            if (key1 == null) {
                 return;
             }
             fireKeyUp(key1);
@@ -280,18 +280,22 @@ public class PianoKeyBoard extends View {
         if (keyListener != null) {
             keyListener.onKeyUp(key);
         }
-        if (!key.isShowCircleAndFinger()) {
-            key.setPressed(false, isPlaySound);
+        if (isPlaySound){
+            MidiSynthUtils.sendNoteOff(0,key.getKeyCode(),100);
         }
-       postInvalidate();
+        key.setPressed(false);
+        postInvalidate();
     }
 
     private void fireKeyDown(Key key) {
         if (keyListener != null) {
             keyListener.onKeyPressed(key);
         }
-        key.setPressed(true, isPlaySound);
-       postInvalidate();
+        key.setPressed(true);
+        if (isPlaySound){
+            MidiSynthUtils.sendNoteOn(0,key.getKeyCode(),100);
+        }
+        postInvalidate();
     }
 
     private Key pointerInWhichKey(float x, float y) {
@@ -302,7 +306,7 @@ public class PianoKeyBoard extends View {
                 break;
             }
         }
-        Log.i(TAG, "pointerInWhichKey: key:"+currentKey+"--x:"+x+"--y:"+y);
+        Log.i(TAG, "pointerInWhichKey: key:" + currentKey + "--x:" + x + "--y:" + y);
         return currentKey;
     }
 
@@ -573,6 +577,5 @@ public class PianoKeyBoard extends View {
          */
         void currentFirstKeyPosition(int position);
     }
-
 
 }
