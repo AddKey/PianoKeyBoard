@@ -35,4 +35,4 @@
 #define __Types__
 */
 
-typedef int socklen_t
+typedef int socklen_t;

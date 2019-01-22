@@ -19,4 +19,4 @@
 /* define to support DARWIN */
 #define DARWIN
 
-typedef int socklen_t
+typedef int socklen_t;
