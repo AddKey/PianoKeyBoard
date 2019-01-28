@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/PianoKeyBoard.iml" filepath="$PROJECT_DIR$/PianoKeyBoard.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sherlockmidi/sherlockmidi.iml" filepath="$PROJECT_DIR$/sherlockmidi/sherlockmidi.iml" />
     </modules>
   </component>
 </project>

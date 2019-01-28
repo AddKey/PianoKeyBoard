@@ -22,6 +22,7 @@ import java.util.Iterator;
 import tech.oom.library.Const;
 import tech.oom.library.R;
 import tech.oom.library.sound.MidiSynthUtils;
+import tech.oom.library.sound.SF2SoundbankUtils;
 
 import static android.content.ContentValues.TAG;
 
@@ -281,7 +282,8 @@ public class PianoKeyBoard extends View {
             keyListener.onKeyUp(key);
         }
         if (isPlaySound){
-            MidiSynthUtils.sendNoteOff(0,key.getKeyCode(),100);
+//            MidiSynthUtils.sendNoteOff(0,key.getKeyCode(),100);
+            SF2SoundbankUtils.soundMidiOff(key.getKeyCode());
         }
         if (!key.isShowCircleAndFinger()){
             key.setPressed(false);
@@ -295,7 +297,8 @@ public class PianoKeyBoard extends View {
         }
         key.setPressed(true);
         if (isPlaySound){
-            MidiSynthUtils.sendNoteOn(0,key.getKeyCode(),100);
+//            MidiSynthUtils.sendNoteOn(0,key.getKeyCode(),100);
+            SF2SoundbankUtils.soundMidiOn(key.getKeyCode());
         }
         postInvalidate();
     }
