@@ -21,11 +21,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    externalNativeBuild {
-        ndkBuild {
-            path "jni/Android.mk"
-        }
-    }
 }
 
 dependencies {
@@ -35,5 +30,4 @@ dependencies {
     })
     implementation 'com.android.support:appcompat-v7:26.+'
     testImplementation 'junit:junit:4.12'
-    implementation project(':sherlockmidi')
 }

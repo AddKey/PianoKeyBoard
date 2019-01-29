@@ -16,7 +16,6 @@ import java.io.InputStream;
 
 import tech.oom.library.keyBoard.Key;
 import tech.oom.library.keyBoard.PianoKeyBoard;
-import tech.oom.library.sound.MidiSynthUtils;
 import tech.oom.library.sound.SF2SoundbankUtils;
 import tech.oom.library.sound.SoundPlayUtils;
 
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SoundPlayUtils.init(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        MidiSynthUtils.init(this);
         SF2SoundbankUtils.init(this);
 
         seekBar = (SeekBar) findViewById(R.id.activity_play_seek_bar);
