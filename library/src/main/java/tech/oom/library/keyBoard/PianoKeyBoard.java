@@ -182,6 +182,7 @@ public class PianoKeyBoard extends View {
     public void clearAllCircleAndFinger() {
         if (list != null) {
             for (Key key : list) {
+                key.setPressed(false);
                 key.setShowCircleAndFinger(false);
             }
             postInvalidate();
@@ -189,6 +190,7 @@ public class PianoKeyBoard extends View {
     }
 
     public void clearCircleAndFinger(Key key) {
+        key.setPressed(false);
         key.setShowCircleAndFinger(false);
         postInvalidate();
     }
